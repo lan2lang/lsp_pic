@@ -60,7 +60,7 @@ def check_login():
 
 def choose_img():
     # Read directories under lsp-db
-    re = requests.get("https://github.com/SatinWuker/lsp/tree/MASTER/lsp-db", headers=headers)
+    re = requests.get("https://github.com/lan2lang/lsp_pic/tree/main/lsp-db", headers=headers)
     # with open("lsp_info.json", "w") as file:
     #     file.write(re.text)
     print()
@@ -89,7 +89,7 @@ def choose_img():
     # Randomly choose one image in the img_list
     name = random.choice(img_list)
     # Get the url of the chosen image
-    url = f"https://raw.githubusercontent.com/SatinWuker/lsp/MASTER/lsp-db/{name}"
+    url = f"https://raw.githubusercontent.com/lan2lang/lsp_pic/master/lsp-db/{name}"
     print("访问 " + colored(url, 'green'))
 
     # Download the image
