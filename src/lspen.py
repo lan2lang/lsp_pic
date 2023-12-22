@@ -6,6 +6,7 @@ import random
 from string import ascii_lowercase
 
 
+
 def download(content, name):
     encoded_string = base64.b64encode(content)
     f_name = ''
@@ -13,7 +14,8 @@ def download(content, name):
         f_name = ''.join(random.choice(ascii_lowercase) for i in range(12))
     else:
         f_name = os.path.basename(name).split('.')[0]
-    with open(f"../lsp-db/{f_name}.lsplol", "wb") as lsp_file:
+        os.makedirs(f'../lsp-db/{dir_name}',exist_ok=True)
+    with open(f"../lsp-db/{dir_name}/{f_name}.lsplol", "wb") as lsp_file:
         lsp_file.write(bytearray(encoded_string))
 
 
@@ -24,8 +26,9 @@ def before_down(name):
         with open(f"{name}", "rb") as image_file:
             download(image_file.read(), name)
 
+dir_name='chunmomo'
 
-dir = 'D:\迅雷下载\电报\Twitter高质量合集-萝莉类Part01(0-50) [8547P+22.3GB]\[Twitter][萝莉] [aiko酱@aikoko33]'
+dir = 'D:\学习\后端\Python\爬虫\code\Demo\wallhaven-download\download\chunmomo'
 
 # 遍历指定目录
 g = os.walk(dir)
