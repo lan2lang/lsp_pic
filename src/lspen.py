@@ -25,7 +25,7 @@ def before_down(name):
             download(image_file.read(), name)
 
 
-dir = "D:\迅雷下载\电报\Twitter高质量合集-萝莉类Part01(0-50) [8547P+22.3GB]\[Twitter][萝莉] [⁵⁵⁵小埋长不高ˡᵃ@Xiaomai522]"
+dir = 'D:\迅雷下载\电报\Twitter高质量合集-萝莉类Part01(0-50) [8547P+22.3GB]\[Twitter][萝莉] [aiko酱@aikoko33]'
 
 # 遍历指定目录
 g = os.walk(dir)

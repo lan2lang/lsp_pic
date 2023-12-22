@@ -76,7 +76,7 @@ def choose_img():
 
 
     #下载所有
-    # for i in img_list:
+    # for i in img_list:pyinstaller-F setup.py
     # 
     #     url = f"https://raw.githubusercontent.com/SatinWuker/lsp/MASTER/lsp-db/{i}"
     #     print("访问 " + colored(url, 'green'))
