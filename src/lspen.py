@@ -26,9 +26,9 @@ def before_down(name):
         with open(f"{name}", "rb") as image_file:
             download(image_file.read(), name)
 
-dir_name='chunmomo'
+dir_name='cosersets'
 
-dir = 'D:\学习\后端\Python\爬虫\code\Demo\wallhaven-download\download\chunmomo'
+dir = 'D:\学习\后端\Python\爬虫\code\Demo\cosersets\download\\all-pic'
 
 # 遍历指定目录
 g = os.walk(dir)
