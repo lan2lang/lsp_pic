@@ -23,6 +23,6 @@
 - 运行 `pip install -r requirements.txt
 
 ## 运行代码
-[lsp.py](src/lsp.py) 为主程序，直接运行即可: `python lsp.py`
+[lsp.py](src/base62/lsp.py) 为主程序，直接运行即可: `python lsp.py`
 
 
