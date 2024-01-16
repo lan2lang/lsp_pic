@@ -76,11 +76,11 @@ def choose_img():
     print("访问 " + colored(url, 'green'))
 
     # Download the image
-    with open(f"{name}.png", 'wb') as img_f:
+    with open(f"{name}.jpg", 'wb') as img_f:
         lsp_content = requests.get(url).content
         img_f.write(lsp_content)
 
-        return f"{name}.png"
+        return f"{name}.jpg"
 
 
 def main():
