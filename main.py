@@ -15,9 +15,9 @@ def upload_pic():
     #     encoded_content = base64.b64encode(content).decode('utf-8')
 
     # 保存地址
-    UPLOAD_PATH='lsp-db2/'+'1'
+    UPLOAD_PATH='lsp-db2/'+'3'
 
-    content=requests.get('https://www.cosersets.com/directlink/1/Money%E5%86%B7%E5%86%B7/%E9%BB%91%E5%91%86%E5%A5%B3%E4%BB%86/07.webp').content
+    content=requests.get('https://www.cosersets.com/directlink/1/Money%E5%86%B7%E5%86%B7/%E9%BB%91%E5%91%86%E5%A5%B3%E4%BB%86/05.webp').content
     encoded_content = base64.b64encode(content).decode('utf-8')
 
     # GitHub API URL
@@ -88,5 +88,6 @@ if __name__ == "__main__":
 
     # get_one_pic()
     # https://github.com/lan2lang/lsp_pic/raw/main/lsp-db2/1.webp
+    upload_pic()
     get_pic_list()
-    # upload_pic()
+    #
