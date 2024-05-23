@@ -58,7 +58,7 @@ def choose_img():
     #加载为json对象
     temp = json.loads(re.text)
 
-    # print(re.text)
+    print(re.headers)
 
     temp = temp['payload']['tree']['items']
 
