@@ -33,6 +33,4 @@
 /src/imgs/
 /setup.cfg
 /setup.py
-/lsp-db/cosersets/
-/lsp-db/hunmomo/
-/lsp-db/漏出艺术家/
+/token.txt

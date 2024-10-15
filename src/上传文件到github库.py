@@ -7,7 +7,7 @@ os.environ["http_proxy"] = "http://127.0.0.1:7890"
 os.environ["https_proxy"] = "http://127.0.0.1:7890"
 
 # GitHub 个人访问令牌
-GITHUB_TOKEN = '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'
+GITHUB_TOKEN = ''
 
 # GitHub 用户名
 GITHUB_USERNAME = 'lan2lang'
