@@ -7,7 +7,7 @@ os.environ["http_proxy"] = "http://127.0.0.1:7890"
 os.environ["https_proxy"] = "http://127.0.0.1:7890"
 
 # GitHub 个人访问令牌
-GITHUB_TOKEN = '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'
+GITHUB_TOKEN = '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'
 
 # GitHub 用户名
 GITHUB_USERNAME = 'lan2lang'
@@ -16,10 +16,10 @@ GITHUB_USERNAME = 'lan2lang'
 REPO_NAME = 'lsp_pic'
 
 # 文件路径
-FILE_PATH = 'G:\Product\lsp_pic\测试图片.jpg'
+FILE_PATH = 'G:\lsp_pic\src\imgs\Kitaro_绮太郎_FGO 清少纳言__DSC9245.webp'
 
 # 上传到 GitHub 存储库中的路径
-UPLOAD_PATH = 'upload/测试图片'
+UPLOAD_PATH = 'path/in/repository/Kitaro_绮太郎_FGO 清少纳言__DSC9245.webp'
 
 # 读取文件内容并进行 base64 编码
 with open(FILE_PATH, 'rb') as file:

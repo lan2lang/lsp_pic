@@ -1,9 +1,8 @@
 import base64
 import os
-
-import requests
 import random
 
+import requests
 from PIL import Image
 
 
@@ -22,7 +21,7 @@ def upload_pic():
     UPLOAD_PATH = 'lsp-db2/' + filename
 
     content = requests.get(
-        'https://www.cosersets.com/directlink/1/Money%E5%86%B7%E5%86%B7/%E9%BB%91%E5%91%86%E5%A5%B3%E4%BB%86/05.webp').content
+        'https://th.wallhaven.cc/lg/yx/yxd8jk.jpg').content
     encoded_content = base64.b64encode(content).decode('utf-8')
 
     # GitHub API URL
@@ -37,7 +36,7 @@ def upload_pic():
     # 请求数据
     data = {
         'message': 'Add new file via API',
-        'content': content,
+        'content': encoded_content,
     }
 
     # 发起 PUT 请求上传文件
@@ -57,14 +56,35 @@ def get_one_pic():
     :return:
     """
     files = get_pic_list()
+    if not files:
+        print('No files found.')
+        return
+
     url = (random.choice(files)['html_url']).replace('blob', 'raw')
     print(url)
-    with open(f"{url.split('/')[-1]}.webp", 'wb') as img_f:
-        lsp_content = requests.get(url).content
-        img_f.write(lsp_content)
+    local_filename = f"{url.split('/')[-1]}"
 
-    with Image.open(f"{url.split('/')[-1]}.webp") as image:
-        image.show()
+    headers = {
+        'Authorization': f'token {GITHUB_TOKEN}'
+    }
+    response = requests.get(url, headers=headers)
+
+    if response.status_code != 200:
+        print('Failed to download image.')
+        return
+
+    with open(local_filename, 'wb') as img_f:
+        img_f.write(response.content)
+
+    try:
+        with Image.open(local_filename) as image:
+            image.show()
+    except IOError:
+        print('Failed to open image.')
+
+    os.remove(local_filename)
+
+
 def get_pic_list():
     """
     获取图片列表
@@ -80,8 +100,6 @@ def get_pic_list():
 
     if response.status_code == 200:
         files = response.json()
-        # for file in files:
-        # print(f"Name: {file['name']}, Type: {file['type']}, URL: {file['html_url']}")
         return files
     else:
         print(f"Failed to retrieve files: {response.status_code}")
@@ -92,7 +110,7 @@ if __name__ == "__main__":
     os.environ["https_proxy"] = "http://127.0.0.1:7890"
 
     # GitHub 个人访问令牌
-    GITHUB_TOKEN = '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'
+    GITHUB_TOKEN = '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'
 
     # GitHub 用户名
     GITHUB_USERNAME = 'lan2lang'
@@ -103,8 +121,4 @@ if __name__ == "__main__":
     # 图库地址（github）
     pic_repository = 'https://github.com/lan2lang/lsp_pic/tree/main/lsp-db2'
 
-    # get_one_pic()
-    # https://github.com/lan2lang/lsp_pic/raw/main/lsp-db2/1.webp
-    upload_pic()
-    get_pic_list()
-    #
+    get_one_pic()
