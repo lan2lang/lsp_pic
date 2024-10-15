@@ -1,6 +1,7 @@
 import base64
 import os
 import random
+import uuid
 
 import requests
 from PIL import Image
@@ -11,12 +12,9 @@ def upload_pic():
     上传图片
     :return:
     """
-    # 读取文件内容并进行 base64 编码
-    # with open(FILE_PATH, 'rb') as file:
-    #     content = file.read()
-    #     encoded_content = base64.b64encode(content).decode('utf-8')
 
-    filename = '4'
+    filename = str(uuid.uuid4())
+
     # 保存地址
     UPLOAD_PATH = 'lsp-db2/' + filename
 
@@ -112,6 +110,9 @@ if __name__ == "__main__":
     # GitHub 个人访问令牌
     GITHUB_TOKEN = ''
 
+    with open('token.txt', 'r', encoding='utf-8') as f:
+        GITHUB_TOKEN = f.readline().strip()
+
     # GitHub 用户名
     GITHUB_USERNAME = 'lan2lang'
 
@@ -121,4 +122,5 @@ if __name__ == "__main__":
     # 图库地址（github）
     pic_repository = 'https://github.com/lan2lang/lsp_pic/tree/main/lsp-db2'
 
+    upload_pic()
     get_one_pic()
