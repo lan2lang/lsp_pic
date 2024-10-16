@@ -1,10 +1,12 @@
 import base64
 import os
 import random
+import threading
 import uuid
+from tkinter import Tk, Button, Label, filedialog, messagebox, simpledialog
 
 import requests
-from PIL import Image
+from PIL import Image, ImageTk
 
 
 def upload_pic():
@@ -12,19 +14,46 @@ def upload_pic():
     上传网络上的图片到GitHub仓库
     :return:
     """
+    # 弹出对话框让用户输入图片URL
+    image_url = simpledialog.askstring("Input", "请输入URL:")
+    if not image_url:
+        messagebox.showerror('Error', '未输入URL')
+        return
 
     filename = str(uuid.uuid4())
+
     # 保存地址
     UPLOAD_PATH = 'lsp-db2/' + filename
 
     # 下载图片
-    response = requests.get('https://th.wallhaven.cc/lg/yx/yxd8jk.jpg')
+    response = requests.get(image_url)
+
     if response.status_code != 200:
         print('Failed to download image.')
         return
     content = response.content
 
-    upload(UPLOAD_PATH, content)
+    show_loading()
+
+    # 下载和上传图片的过程可以使用线程来避免界面冻结
+    thread = threading.Thread(target=upload, args=(UPLOAD_PATH, content))
+    thread.start()
+
+
+def show_loading():
+    """
+    显示加载中提示
+    """
+    loading_label.config(text="加载中...请稍候")
+    root.update_idletasks()  # 刷新界面，确保“加载中”即时显示
+
+
+def hide_loading():
+    """
+    隐藏加载中提示
+    """
+    loading_label.config(text="")
+    root.update_idletasks()  # 刷新界面，移除“加载中”提示
 
 
 def upload_local_pic(local_image_path):
@@ -44,7 +73,12 @@ def upload_local_pic(local_image_path):
     with open(local_image_path, 'rb') as img_file:
         content = img_file.read()
 
-    upload(UPLOAD_PATH, content)
+    # 显示“加载中”提示
+    show_loading()
+
+    # 下载和上传图片的过程可以使用线程来避免界面冻结
+    thread = threading.Thread(target=upload, args=(UPLOAD_PATH, content))
+    thread.start()
 
 
 def upload(UPLOAD_PATH, content):
@@ -71,7 +105,10 @@ def upload(UPLOAD_PATH, content):
 
     # 检查请求结果
     if response.status_code == 201:
+        hide_loading()
         print(f'File uploaded successfully: {response.json()["content"]["html_url"]}')
+        messagebox.showinfo('Success', f'File uploaded successfully')
+
     else:
         print('Failed to upload file.')
         print('Response:', response.json())
@@ -82,6 +119,7 @@ def get_one_pic():
     随机获取一张图片并展示
     :return:
     """
+
     try:
         files = get_pic_list()
         if not files:
@@ -105,12 +143,14 @@ def get_one_pic():
         with open(local_filename, 'wb') as img_f:
             img_f.write(response.content)
 
-        # 显示图片
-        try:
-            with Image.open(local_filename) as image:
-                image.show()
-        except IOError:
-            print('Failed to open image.')
+        # # 显示图片
+        # try:
+        #     with Image.open(local_filename) as image:
+        #         image.show()
+        # except IOError:
+        #     print('Failed to open image.')
+
+        show_image(local_filename)
 
         # 删除本地图片
         os.remove(local_filename)
@@ -143,26 +183,62 @@ def get_pic_list():
         return []
 
 
+def show_image(image_path):
+    """
+    在 GUI 界面上展示图片
+    """
+    try:
+        img = Image.open(image_path)
+        img.thumbnail((300, 300))  # 调整图片大小
+        img_tk = ImageTk.PhotoImage(img)
+        image_label.config(image=img_tk)
+        image_label.image = img_tk  # 保存引用避免被垃圾回收
+    except Exception as e:
+        messagebox.showerror('Error', f'Failed to open image: {e}')
+
+
+def select_and_upload():
+    """
+    打开文件对话框，选择本地图片并上传
+    """
+    local_image_path = filedialog.askopenfilename(
+        title="Select an image",
+        filetypes=[("Image Files", "*.png;*.jpg;*.jpeg;*.gif")]
+    )
+    if local_image_path:
+        upload_local_pic(local_image_path)
+
+
+# 创建图形界面
+root = Tk()
+root.title("GitHub 图片上传工具")
+root.geometry("400x400")
+
+# 标签和按钮
+Label(root, text="选择图片或上传网络图片").pack(pady=10)
+
+Button(root, text="上传本地图片", command=select_and_upload).pack(pady=10)
+Button(root, text="上传网络图片", command=upload_pic).pack(pady=10)
+Button(root, text="展示随机图片", command=get_one_pic).pack(pady=10)
+
+# 加载中的提示标签
+loading_label = Label(root, text="", fg="red")
+loading_label.pack(pady=10)
+
+# 展示图片的标签
+image_label = Label(root)
+image_label.pack(pady=10)
+
+# 运行主循环
 if __name__ == "__main__":
-    # 设置代理，如果不需要代理，可以注释掉这部分
     os.environ["http_proxy"] = "http://127.0.0.1:7890"
     os.environ["https_proxy"] = "http://127.0.0.1:7890"
-
+    # 从文件中读取GitHub token
     with open('token.txt', 'r', encoding='utf-8') as f:
         GITHUB_TOKEN = f.readline().strip()
 
-    # GitHub 用户名
     GITHUB_USERNAME = 'lan2lang'
-
-    # GitHub 仓库名称
     REPO_NAME = 'lsp_pic'
 
-    # 图库地址
-    pic_repository = f'https://github.com/{GITHUB_USERNAME}/{REPO_NAME}/tree/main/lsp-db2'
-
-    # 上传图片
-    # upload_pic()
-
-    upload_local_pic("C:\\Users\\Administrator\Pictures\其他\wallhaven-e7jj6r.jpg")
-    # 获取随机图片并展示
-    get_one_pic()
+    # 启动GUI
+    root.mainloop()
