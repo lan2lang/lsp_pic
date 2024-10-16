@@ -153,7 +153,7 @@ def get_one_pic():
         show_image(local_filename)
 
         # 删除本地图片
-        os.remove(local_filename)
+        # os.remove(local_filename)
     except Exception as e:
         print(f"Error in retrieving or displaying the image: {e}")
 
@@ -188,13 +188,33 @@ def show_image(image_path):
     在 GUI 界面上展示图片
     """
     try:
+        # print(image_path)
         img = Image.open(image_path)
         img.thumbnail((300, 300))  # 调整图片大小
         img_tk = ImageTk.PhotoImage(img)
         image_label.config(image=img_tk)
         image_label.image = img_tk  # 保存引用避免被垃圾回收
+        image_label.bind("<Double-1>", lambda event: open_image_with_default_app(image_path))  # 绑定双击事件
     except Exception as e:
         messagebox.showerror('Error', f'Failed to open image: {e}')
+
+
+def open_image_with_default_app(image_path):
+    """
+    将图片数据保存为临时文件，并使用系统默认的图片查看器打开
+    """
+    # temp_image_path = "temp_image.jpg"
+    # with open(temp_image_path, 'wb') as temp_file:
+    #     temp_file.write(image_data)
+
+    image_path = os.path.abspath(image_path)
+    # 使用系统默认的图片查看器打开
+    try:
+        with Image.open(image_path) as image:
+            image.show()
+    except IOError:
+        print('Failed to open image.')
+    os.remove(image_path)
 
 
 def select_and_upload():

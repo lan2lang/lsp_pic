@@ -30,7 +30,7 @@ def before_down(name):
 
 dir_name = 'cosersets'
 
-dir = 'F:\SUMMER\电报\Twitter高质量合集-萝莉类Part01(0-50) [8547P+22.3GB]\[Twitter][萝莉] [FXHMRW@FXHMRW]'
+dir = ''
 
 # 遍历指定目录
 g = os.walk(dir)
